@@ -1,8 +1,10 @@
 # Auto-Launch-App
 Auto Launch App track another app and execute many operation after detect state changed
 
+### Screenshots
+
+![Screenshot](Screenshot.png)
+
 ### Credits
 
 Mohammad Elsheimy for DisplayConvert ![sources](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
-
-![Screenshot](Screenshot.png)
