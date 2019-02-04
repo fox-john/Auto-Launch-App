@@ -1,0 +1,81 @@
+﻿<Window x:Class="AutoLaunchApp.view.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Auto Launch App" MinWidth="600" MinHeight="500" Height="500" Width="600">
+
+    <Window.Resources>
+        <Style x:Key="DataGridHeaderStyle" TargetType="{x:Type DataGrid}">
+            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle}"/>
+        </Style>
+        <Style x:Key="ColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition />
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Button Grid.Column="0" x:Name="addRowToList" Content="Add new software to list" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" Height="30" Click="AddTrackedApp" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <DataGrid x:Name="trackedListGrid" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Style="{DynamicResource DataGridHeaderStyle}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn x:Name="isActiveTrackColumn" Header="Active" Width="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsActive}" Checked="SwitchIsActive" Unchecked="SwitchIsActive" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn x:Name="trackedAppColumn" Header="Tracked" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button IsEnabled="{Binding Path=IsEnabled}" Content="{Binding Path=TrackedAppName}" Click="SelectTrackedApp"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="stateAppColumn" Header="State" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox x:Name="stateAppType" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" SelectionChanged="SwitchState" SelectedIndex="{Binding Path=State}">
+                                    <ComboBoxItem x:Name="noState">Select action...</ComboBoxItem>
+                                    <ComboBoxItem x:Name="atLaunch">At launch</ComboBoxItem>
+                                    <ComboBoxItem x:Name="atExit">At exit</ComboBoxItem>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="EditThisRow" Header="Parameters" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="EditTrackedAppDetails" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Edit</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="RemoveThisRow" Header="Delete" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="RemoveTrackedApp" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >Remove</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <CheckBox Content="active debug log(s)" HorizontalAlignment="Left" Margin="242,5,0,0" VerticalAlignment="Top" IsEnabled="false"/>
+            <CheckBox Content="Launch as administrator" HorizontalAlignment="Left" Margin="40,5,0,0" VerticalAlignment="Top" IsEnabled="false"/>
+            <CheckBox Content="Launch at startup" HorizontalAlignment="Left" Margin="430,5,0,0" VerticalAlignment="Top" IsEnabled="false"/>
+        </Grid>
+    </Grid>
+</Window>
