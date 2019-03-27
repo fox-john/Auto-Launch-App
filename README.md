@@ -6,7 +6,7 @@ Auto Launch App track another app and execute many operation after detect state 
 ![Screenshot](Screenshot.png)
 
 ### Updates 
-##update 1.1 beta
+## update 1.1 beta
 - Add option to enable/disable logs;
 - Fix crash at first startup;
 - Fix the bug that changed resolution automatically after reboot;
