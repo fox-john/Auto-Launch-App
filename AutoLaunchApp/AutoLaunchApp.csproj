@@ -80,6 +80,7 @@
     </ApplicationDefinition>
     <Compile Include="LogWriter.cs" />
     <Compile Include="Model\ActionApp.cs" />
+    <Compile Include="Model\Config.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="view\Details.xaml.cs">
       <DependentUpon>Details.xaml</DependentUpon>

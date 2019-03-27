@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoLaunchApp;
+using System;
+using System.Diagnostics;
 using System.IO;
 
 
@@ -25,20 +27,26 @@ public class LogWriter
     {
         try
         {
-            using (StreamWriter stream = File.AppendText(logFile))
+            if(Config.activeLogs)
             {
-                Log(_message, stream);
+                using (StreamWriter stream = File.AppendText(logFile))
+                {
+                    Log(_message, stream);
+                }
             }
         }
-        catch {}
+        catch(Exception ex)
+        {
+            Debug.WriteLine("ERROR WRITE LOG");
+        }
     }
 
     public void Log(string _message, TextWriter _txtWriter)
     {
         try
         {
-            _txtWriter.WriteLine("{0} {1} :", DateTime.Now.ToLongDateString(), DateTime.Now.ToLongTimeString());
-            _txtWriter.WriteLine("{0}", _message);
+            _txtWriter.WriteLine("{0} {1}", DateTime.Now.ToLongDateString(), DateTime.Now.ToLongTimeString());
+            _txtWriter.WriteLine(_message);
             _txtWriter.WriteLine("-------------------------------");
         }
         catch {}

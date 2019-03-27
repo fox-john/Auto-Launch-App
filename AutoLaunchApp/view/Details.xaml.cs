@@ -50,7 +50,7 @@ namespace AutoLaunchApp.view
                 closeAppListGrid.Items.Add(newApp);
             }
 
-            JsonData.Save();
+            JsonData.Savejson(fileType.trackedList);
         }
         
         /// <summary>
@@ -114,7 +114,7 @@ namespace AutoLaunchApp.view
                 trackedApp.CloseAppList.RemoveAt(rowIndex);
             }
 
-            JsonData.Save();
+            JsonData.Savejson(fileType.trackedList);
         }
 
         /// <summary>

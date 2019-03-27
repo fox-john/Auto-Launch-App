@@ -16,6 +16,7 @@ namespace AutoLaunchApp.view
     {
         public static Dictionary<int, Window> windowList = new Dictionary<int, Window>();
         public static List<DisplayInfos> displayList = DisplayInfos.GetAvailableModes();
+        public static Config config = (Config)JsonData.LoadFile(fileType.Configuration);
         public static bool closeMainWindow = false;
         public WindowState state = WindowState.Normal;
         public TaskbarIcon AppTrayIcon;
@@ -30,6 +31,11 @@ namespace AutoLaunchApp.view
 
             InitializeComponent();
 
+            LoadOver();
+        }
+
+        public void LoadOver()
+        {
             AppTrayIcon = Utils.InitTaskBar();
             MenuItem item = new MenuItem();
             item.Header = "Exit";
@@ -37,14 +43,23 @@ namespace AutoLaunchApp.view
 
             AppTrayIcon.ContextMenu.Items.Add(item);
 
-
-            JsonData.Load().ForEach(app => trackedListGrid.Items.Add(app));
+            List<TrackedApp> trackedList = (List<TrackedApp>)JsonData.LoadFile(fileType.trackedList);
+            trackedList.ForEach(app => trackedListGrid.Items.Add(app));
 
             this.Closing += ClickOnCloseButton;
             AppTrayIcon.TrayMouseDoubleClick += DoubleClickOnTrayIcon;
 
             this.state = WindowState.Minimized;
             this.Hide();
+        }
+
+        private void ActiveLogs(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkbox = sender as CheckBox;
+
+            if (checkbox.IsChecked == true)
+                config.ActiveLogs = true;
+            else config.ActiveLogs = false;
         }
 
         /// <summary>
@@ -179,6 +194,8 @@ namespace AutoLaunchApp.view
             {
                 this.state = WindowState.Normal;
                 this.Show();
+
+                activeLogsCheckbox.IsChecked = config.ActiveLogs;
             }
         }
        
@@ -190,7 +207,8 @@ namespace AutoLaunchApp.view
         private void CloseAppWithTrayIcon(object sender, RoutedEventArgs e)
         {
             TrackedApp.CloseAllThreads();
-            JsonData.Save();
+            JsonData.Savejson(fileType.trackedList);
+            JsonData.Savejson(fileType.Configuration);
             closeMainWindow = true;
 
             foreach (Window window in windowList.Values)

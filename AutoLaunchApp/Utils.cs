@@ -1,7 +1,11 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +15,8 @@ namespace AutoLaunchApp
 {
     class Utils
     {
+        internal static DateTime lastScreenChanged;
+
         /// <summary>
         /// Init taskbar
         /// </summary>

@@ -25,7 +25,7 @@ namespace AutoLaunchApp
         public void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, e);
-            JsonData.Save();
+            JsonData.Savejson(fileType.trackedList);
         }
 
         public string TrackedAppName
@@ -140,13 +140,14 @@ namespace AutoLaunchApp
                             // if process detected
                             if (process.ProcessName == trackedAppName.Substring(0, trackedAppName.Length -4))
                             {
-                                new LogWriter(LogWriter.LogType.INFORMATION, "Process " + trackedAppName + " is started !");
+                                new LogWriter(LogWriter.LogType.INFORMATION, "Process " + trackedAppName + " is started");
 
                                 // wait application exited
                                 if (State == (int)StateType.atExit)
                                 {
                                     while (isActive && !process.HasExited)
                                     {
+                                        new LogWriter(LogWriter.LogType.INFORMATION, "Process " + trackedAppName + " is stopped");
                                         Thread.Sleep(1000);
                                     }
                                 }
@@ -154,21 +155,22 @@ namespace AutoLaunchApp
                                 // launch all applications in launchAppList
                                 foreach (ActionApp app in launchAppList)
                                 {
+                                    new LogWriter(LogWriter.LogType.INFORMATION, "application " + app.AppName + " is launched");
                                     StartProcess(app.AppName, app.Arguments);
                                 }
 
                                 // close all application in closeAppList
                                 foreach (ActionApp app in closeAppList)
                                 {
-                                    StopProcess(app.AppName.Substring(0, app.AppName.Length -4));
+                                    StopProcess(app.AppName.Substring(0, app.AppName.Length - 4));
                                 }
 
-                                // change resolution of main screen
                                 ChangeScreenResolution();
 
                                 // wait application exited
                                 while (isActive && !process.HasExited)
                                 {
+                                    new LogWriter(LogWriter.LogType.INFORMATION, "Process " + trackedAppName + " is stopped");
                                     Thread.Sleep(1000);
                                 }
                             }
@@ -230,11 +232,20 @@ namespace AutoLaunchApp
         {
             try
             {
+                bool processFound = false;
+
                 foreach (Process process in Process.GetProcessesByName(_exeFileName))
                 {
-                    new LogWriter(LogWriter.LogType.ERROR, "Process " + _exeFileName + " stopped");
-                    process.Kill();
+                    if (process.ProcessName == _exeFileName)
+                    {
+                        processFound = true;
+                        process.Kill();
+                        return;
+                    }
                 }
+
+                if(!processFound) new LogWriter(LogWriter.LogType.INFORMATION, "application " + _exeFileName + " isn't found and isn't stopped");
+                else new LogWriter(LogWriter.LogType.INFORMATION, "Process " + _exeFileName + " as stopped");
             }
             catch(Exception ex)
             {
@@ -244,23 +255,32 @@ namespace AutoLaunchApp
 
         private void ChangeScreenResolution()
         {
-            DisplayInfos currentDisplay = DisplayInfos.GetCurrentMode();
-            
-            // get index of current display in displayList
-            int currentDisplayIndex = MainWindow.displayList.FindIndex(display => (display.width == currentDisplay.width) && (display.height == currentDisplay.height) && (display.color == currentDisplay.color));
-
-            DisplayInfos selectedDisplay = MainWindow.displayList[screenResolutionIndex];
-
-            // if current display index != displayIndex selected
-            if (screenResolutionIndex != currentDisplayIndex)
+            if(Utils.lastScreenChanged == null) Utils.lastScreenChanged = DateTime.Now;
+            else
             {
-                new LogWriter(LogWriter.LogType.INFORMATION, "Change display setting from " +
-                    currentDisplay.width + "x" + currentDisplay.height + "(" + currentDisplay.color + ") to " +
-                    selectedDisplay.width + "x" + selectedDisplay.height + "(" + selectedDisplay.color + ")");
+                if(DateTime.Now.Subtract(Utils.lastScreenChanged).Seconds > 1)
+                {
+                    Utils.lastScreenChanged = DateTime.Now;
 
-                ChangeResolutionResult result = (ChangeResolutionResult)DisplayInfos.ChangeDisplaySettings(selectedDisplay.width, selectedDisplay.height, selectedDisplay.color);
+                    DisplayInfos currentDisplay = DisplayInfos.GetCurrentMode();
 
-                new LogWriter(LogWriter.LogType.WARNING, "Resolution change with this code : " + result.ToString());
+                    // get index of current display in displayList
+                    int currentDisplayIndex = MainWindow.displayList.FindIndex(display => (display.width == currentDisplay.width) && (display.height == currentDisplay.height) && (display.color == currentDisplay.color));
+
+                    DisplayInfos selectedDisplay = MainWindow.displayList[screenResolutionIndex];
+
+                    // if current display index != displayIndex selected
+                    if (screenResolutionIndex != currentDisplayIndex)
+                    {
+                        new LogWriter(LogWriter.LogType.INFORMATION, "Change display setting from " +
+                            currentDisplay.width + "x" + currentDisplay.height + "(" + currentDisplay.color + ") to " +
+                            selectedDisplay.width + "x" + selectedDisplay.height + "(" + selectedDisplay.color + ")");
+
+                        ChangeResolutionResult result = (ChangeResolutionResult)DisplayInfos.ChangeDisplaySettings(selectedDisplay.width, selectedDisplay.height, selectedDisplay.color);
+
+                        new LogWriter(LogWriter.LogType.WARNING, "Resolution change with this code : " + result.ToString());
+                    }
+                }
             }
         }
 

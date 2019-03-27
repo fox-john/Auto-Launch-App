@@ -13,7 +13,7 @@ namespace AutoLaunchApp
         public void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, e);
-            JsonData.Save();
+            JsonData.Savejson(fileType.trackedList);
         }
 
         public string AppName
