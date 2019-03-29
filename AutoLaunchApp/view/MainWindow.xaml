@@ -24,7 +24,7 @@
             <Button Grid.Column="0" x:Name="addRowToList" Content="Add new software to list" HorizontalAlignment="Stretch" Margin="185,10,10,0" VerticalAlignment="Top" Height="30" Click="AddTrackedApp" />
         </Grid>
         <Grid Grid.Row="1">
-            <DataGrid x:Name="trackedListGrid" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Style="{DynamicResource DataGridHeaderStyle}">
+            <DataGrid IsReadOnly="true" x:Name="trackedListGrid" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Style="{DynamicResource DataGridHeaderStyle}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn x:Name="isActiveTrackColumn" Header="Active" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
