@@ -18,4 +18,4 @@ Auto Launch App track another app and execute many operation after detect state 
 
 ### Credits
 
-Mohammad Elsheimy for DisplayConvert ![sources](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
+Mohammad Elsheimy for DisplayConvert [sources](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
