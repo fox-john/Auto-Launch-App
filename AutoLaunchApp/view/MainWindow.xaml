@@ -29,7 +29,7 @@
                     <DataGridTemplateColumn x:Name="isActiveTrackColumn" Header="Active" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding Path=IsActive}" Click="SwitchIsActive" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding Path=IsActive}" Click="SwitchIsActive" Checked="SwitchIsActive" Unchecked="SwitchIsActive" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
